@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Регистрация</title>
+</head>
+<body>
+<div class="container">
+    <h2>Регистрация</h2>
+    <div>
+        <label for="newUsername">Имя пользователя:</label>
+        <input type="text" id="newUsername" required>
+    </div>
+    <div>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" required>
+    </div>
+    <div>
+        <label for="role">Роль:</label>
+        <select id="role">
+            <option value="user">Обычный пользователь</option>
+            <option value="admin">Администратор</option>
+        </select>
+    </div>
+    <button id="registerButton">Зарегистрироваться</button>
+    <div id="registrationResult"></div>
+    <p>Если вы уже зарегистрированы, <a href="login.html">войдите</a>.</p>
+</div>
+<script>
+    document.getElementById('registerButton').addEventListener('click', async function() {
+        const username = document.getElementById('newUsername').value;
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
+
+        // Проверка на наличие введенных данных
+        if (!username || !password) {
+            document.getElementById('registrationResult').textContent = 'Пожалуйста, заполните все поля.';
+            return;
+        }
+
+        const usersData = JSON.parse(localStorage.getItem('usersData')) || {};
+
+        // Проверка на существование пользователя
+        if (usersData[username]) {
+            document.getElementById('registrationResult').textContent = 'Пользователь с таким именем уже существует.';
+            return;
+        }
+
+        usersData[username] = { password, role };
+        localStorage.setItem('usersData', JSON.stringify(usersData));
+
+        alert('Регистрация прошла успешно!');
+        window.location.href = 'login.html';
+    });
+</script>
+</body>
+</html>
